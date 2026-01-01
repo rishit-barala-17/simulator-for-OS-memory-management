@@ -1,4 +1,4 @@
-#include "C:/Users/asus/Documents/Rishit IITR Academics/ACM Project/src/buddy/buddy_alloc.h"
+#include "C:/Users/asus/Documents/Rishit IITR Academics/ACM Project/src/02_buddy/buddy_alloc.h"
 #include <iostream>
 using namespace std;
 
