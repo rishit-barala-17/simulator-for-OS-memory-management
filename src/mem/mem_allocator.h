@@ -3,21 +3,27 @@
 #include <vector>
 using namespace std;
 
-	struct Block {
-	    int start;	
-	    int size;			
-	    int requested; 		
-	    bool isFree;
-	    int id;
-	};
 
-enum Algorithm_type{
+enum Algorithm_type
+{
     FIRST_FIT,
     BEST_FIT,
     WORST_FIT
 };
 
-class MemAllocator {
+
+struct Block 
+{
+    int start;	
+    int size;			
+    int requested; 		
+    bool isFree;
+    int id;
+};
+
+
+class MemAllocator 
+{
     private:
         vector<Block> blocks;
         int total_memory;
@@ -40,5 +46,6 @@ class MemAllocator {
         
         Algorithm_type which_algo; 
 };
+
 
 #endif

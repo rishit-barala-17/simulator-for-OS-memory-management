@@ -20,7 +20,9 @@ MemAllocator::MemAllocator(int memorysize) {
 }
 
 
-void MemAllocator::setallocator(Algorithm_type type){
+
+void MemAllocator::setallocator(Algorithm_type type)
+{
     which_algo = type;
 }
 	
@@ -30,11 +32,14 @@ void MemAllocator::memoryAlloc(int size)
 {
    total_requests++;
    int idx = chooseBlock(size, which_algo);
-   if (idx == -1) 
-   {
-       cout << "[ALLOC FAILED] No free block available for size = " << size << " bytes\n";
-       return;
-   }
+   if (idx == -1)
+    {
+        cout << "\n=== ALLOCATION FAILED ===\n";
+        cout << "Requested Size : " << size << " bytes\n";
+        cout << "Reason         : No suitable free block\n";
+        return;
+    }
+
    successful_allocs++;
    int startAddr = blocks[idx].start;
    int prevSize = blocks[idx].size;
@@ -54,18 +59,19 @@ void MemAllocator::memoryAlloc(int size)
 	   rem.id = -1;
 	   blocks.insert(blocks.begin() + idx + 1, rem);
 	   }
-	cout << "\n[ALLOCATED]" << " algo = ";
+	cout << "\n=== ALLOCATION SUCCESS ===\n";
+    cout << "Algorithm      : ";
+    if (which_algo == FIRST_FIT)      cout << "FIRST_FIT\n";
+    else if (which_algo == BEST_FIT)  cout << "BEST_FIT\n";
+    else if (which_algo == WORST_FIT) cout << "WORST_FIT\n";
 
-	if (which_algo == FIRST_FIT) cout << "FIRST_FIT";
-	else if (which_algo == BEST_FIT) cout << "BEST_FIT";
-	else if (which_algo == WORST_FIT) cout << "WORST_FIT";
-
-	cout << "  | id = " << blocks[idx].id
-     << "  | addr = 0x" << hex << blocks[idx].start
-     << dec
-     << "  | size = " << size << " bytes\n";
+    cout << "Block ID       : " << blocks[idx].id << "\n";
+    cout << "Start Address  : 0x" << hex << blocks[idx].start << dec << "\n";
+    cout << "Block Size     : " << size << " bytes\n";
 
 }
+
+
 
 int MemAllocator::chooseBlock(int size, Algorithm_type which_algo)
 {
@@ -112,24 +118,27 @@ int MemAllocator::chooseBlock(int size, Algorithm_type which_algo)
 }
 
 	
+
 void MemAllocator::freeBlock(int id)
 {
-    for (auto &blk : blocks) 
+    for (auto &blk : blocks)
     {
-        if (!blk.isFree && blk.id == id) 
+        if (!blk.isFree && blk.id == id)
         {
             blk.isFree = true;
             blk.id = -1;
             blk.requested = 0;
             coalesceFreeBlocks();
-            cout << "\n[FREED]"
-         	<< "  | id = " << id
-         	<< "  | status = OK\n";
-    		return;
+
+            cout << "\n=== FREE SUCCESS ===\n";
+            cout << "Block ID   : " << id << "\n";
+            cout << "Status     : OK\n";
+            return;
         }
     }
-    cout << "\n[FREE FAILED]" << "  | id = " << id << endl;
-
+    cout << "\n=== FREE FAILED ===\n";
+    cout << "Block ID : " << id << "\n";
+    cout << "Status   : Block not found\n";
 }
 
 
@@ -149,29 +158,40 @@ void MemAllocator::coalesceFreeBlocks()
 
 
 	
-void MemAllocator::memoryDump() 
+void MemAllocator::memoryDump()
 {
-	cout << "------------------ MEMORY MAP ------------------\n";
+    cout << "\n============ M E M O R Y   M A P ============\n";
+    cout << left
+         << setw(16) << "Address Range"
+         << setw(9)  << "Status"
+         << setw(11) << "Block ID"
+         << setw(18) << "Size"
+         << "\n";
+    cout << "---------------------------------------------\n";
 
-
-    cout << dec;
-	
-    for (auto &blk : blocks) 
+    for (auto &blk : blocks)
     {
+        cout << "0x" << hex << setw(4) << blk.start
+             << "- 0x" << setw(4) << (blk.start + blk.size - 1)
+             << dec << "   ";
 
-        cout << "[0x" << hex << blk.start ;
-        cout << " - 0x" << (blk.start + blk.size - 1) << "] ";
-
-        if (blk.isFree) 
+        if (blk.isFree)
         {
-            cout << "FREE" <<endl;
-        } 
-        else 
+            cout << setw(11)  << "FREE"
+                 << setw(8) << "-"
+                 << setw(15) << (to_string(blk.size) + " bytes")
+                 << "\n";
+        }
+        else
         {
-            cout << "USED (id=" << dec << blk.id << ")" <<endl;
+            cout << setw(11)  << "USED"
+                 << setw(8) << blk.id
+                 << setw(15) << (to_string(blk.size) + " bytes")
+                 << "\n";
         }
     }
-    cout<<endl;
+
+    cout << "---------------------------------------------\n";
 }
 
 
@@ -196,37 +216,47 @@ void MemAllocator::memoryInfo()
 	     }
 	 }
 
-	 double external_frag = (freemem > 0) ? 100.0 * (double)(freemem - largest_free) / freemem : 0.0;
+	double external_frag = (freemem > 0) ? 100.0 * (double)(freemem - largest_free) / freemem : 0.0;
 
-	 double utilization = 100.0 * used / total_memory;
-	 double success_rate = (total_requests > 0) ? 100.0 * successful_allocs / total_requests : 0.0;
+	double utilization = 100.0 * used / total_memory;
+    
+	double success_rate = (total_requests > 0) ? 100.0 * successful_allocs / total_requests : 0.0;
 
-	cout << "\n================================================\n";
-	cout << "        MEMORY STATISTICS REPORT     \n";
-	cout << "================================================\n";
+	cout << "\n===============================================\n";
+	cout << "M E M O R Y   S T A T I S T I C S   R E P O R T\n";
+	cout << "===============================================\n";
 	
-	cout << left << setw(36) << "Total Memory"
+	cout << left << setw(35) << "Total Memory"
 	     << ": " << total_memory << " bytes\n";
 	
-	cout << left << setw(36) << "Used Memory"
+	cout << left << setw(35) << "Used Memory"
 	     << ": " << used << " bytes\n";
 	
-	cout << left << setw(36) << "Free Memory"
+	cout << left << setw(35) << "Free Memory"
 	     << ": " << freemem << " bytes\n";
 	
-	cout << left << setw(36) << "Internal Fragmentation"
+    cout << left << setw(35) << "Total Requests"
+         << ": " << total_requests << "\n";
+
+    cout << left << setw(35) << "Successful Allocations"
+         << ": " << successful_allocs << "\n";
+
+    cout << left << setw(35) << "Failed Allocations"
+         << ": " << (total_requests - successful_allocs) << "\n";
+
+	cout << left << setw(35) << "Internal Fragmentation"
 	     << ": " << internal_frag << " bytes\n";
 	
-	cout << left << setw(36) << "External Fragmentation"
+	cout << left << setw(35) << "External Fragmentation"
 	     << ": " << fixed << setprecision(2) << external_frag << " %\n";
 	
-	cout << left << setw(36) << "Memory Utilization"
+	cout << left << setw(35) << "Memory Utilization"
 	     << ": " << fixed << setprecision(2) << utilization << " %\n";
 	
-	cout << left << setw(36) << "Allocation Success Rate"
+	cout << left << setw(35) << "Allocation Success Rate"
 	     << ": " << fixed << setprecision(2) << success_rate << " %\n";
 		
-	cout << "================================================\n";
+	cout << "===============================================\n";
 
 }
 	
