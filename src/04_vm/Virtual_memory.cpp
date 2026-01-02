@@ -21,6 +21,12 @@ void VirtualMemory::touch(int vaddr)
 {
     access_count++;
 
+    if (vaddr < 0)
+    {
+    cout << "Virtual address error: negative address\n";
+    return;
+    }
+
     int page_id = vaddr / pg_size;
     int offset = vaddr % pg_size;
 
@@ -74,6 +80,12 @@ void VirtualMemory::touch(int vaddr)
 int VirtualMemory::resolve(int vaddr, bool& fault) 
 {
     access_count++;
+
+    if (vaddr < 0) 
+    {
+        fault = false;
+        return -1;
+    }
 
     int page_id = vaddr / pg_size;
     int offset = vaddr % pg_size;
