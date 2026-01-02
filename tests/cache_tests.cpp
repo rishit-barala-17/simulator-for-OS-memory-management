@@ -1,8 +1,6 @@
-#include "cache_layer.h"
+#include "C:/Users/asus/Documents/Rishit IITR Academics/ACM Project/src/03_cache/cache_layer.h"
 #include <iostream>
 using namespace std;
-
-// just checking the working of code till now. //
 
 void runTest(ReplacementPolicy policy, const char* name) 
 {
@@ -23,8 +21,8 @@ void runTest(ReplacementPolicy policy, const char* name)
     cache.printStats();
 }
 
-int main() {
-
+int main() 
+{
     runTest(ReplacementPolicy::FIFO, "FIFO");
     runTest(ReplacementPolicy::LRU,  "LRU");
     runTest(ReplacementPolicy::LFU,  "LFU");

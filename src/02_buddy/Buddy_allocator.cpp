@@ -99,6 +99,7 @@ void BuddyAllocator::freeBlock(int address, int size)
 }
 
 
+
 void BuddyAllocator::memoryDump()
 {
     ios oldState(nullptr);

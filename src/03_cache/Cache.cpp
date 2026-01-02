@@ -4,8 +4,12 @@
 #include <climits>
 using namespace std;
 
+
+
 CacheLayer::CacheLayer(int size, ReplacementPolicy p)
     : maxEntries(size), policy(p), hitCount(0), missCount(0) {}
+
+
 
 bool CacheLayer::probe(int addr) 
 {
@@ -30,6 +34,8 @@ bool CacheLayer::probe(int addr)
     missCount++;
     return false;
 }
+
+
 
 void CacheLayer::evict() 
 {
@@ -70,6 +76,8 @@ void CacheLayer::evict()
     table.erase(victim);
 }
 
+
+
 void CacheLayer::push(int addr)
 {
     if (table.count(addr)) return;
@@ -96,21 +104,29 @@ void CacheLayer::push(int addr)
     }
 }
 
+
+
 int CacheLayer::getHits() const 
 {
     return hitCount;
 }
+
+
 
 int CacheLayer::getMisses() const 
 {
     return missCount;
 }
 
+
+
 double CacheLayer::hitRatio() const 
 {
     int total = hitCount + missCount;
     return total == 0 ? 0.0 : (double)hitCount / total;
 }
+
+
 
 void CacheLayer::printStats(const char* label) const 
 {
@@ -120,8 +136,12 @@ void CacheLayer::printStats(const char* label) const
     cout << "Hit Ratio: " << fixed << setprecision(4) << hitRatio() << endl;
 }
 
+
+
 CacheHierarchy::CacheHierarchy(int l1Size, int l2Size, int l3Size, ReplacementPolicy p)
     : l1(l1Size, p), l2(l2Size, p), l3(l3Size, p), totalPenalty(0) {}
+
+
 
 void CacheHierarchy::read(int addr) 
 {
@@ -151,6 +171,8 @@ void CacheHierarchy::read(int addr)
         l1.push(addr);
     }
 }
+
+
 
 void CacheHierarchy::printStats() const 
 {

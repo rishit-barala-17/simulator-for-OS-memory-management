@@ -1,7 +1,7 @@
 #include "C:/Users/asus/Documents/Rishit IITR Academics/ACM Project/src/01_mem/mem_allocator.h"
 
-int main() {
-
+int main() 
+{
     MemAllocator mem_ctrl(1024);
 
     mem_ctrl.setallocator(WORST_FIT);

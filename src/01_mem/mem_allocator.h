@@ -1,5 +1,6 @@
 #ifndef ALLOCATOR_H
 #define ALLOCATOR_H
+
 #include <vector>
 using namespace std;
 

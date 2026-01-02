@@ -7,11 +7,13 @@
 #include <list>
 using namespace std;
 
+
 enum class ReplacementPolicy {
     FIFO,
     LRU,
     LFU
 };
+
 
 class CacheLayer {
 private:
@@ -45,6 +47,7 @@ public:
     void printStats(const char* label) const;
 };
 
+
 class CacheHierarchy {
 private:
     CacheLayer l1;
@@ -57,5 +60,6 @@ public:
     void read(int addr);
     void printStats() const;
 };
+
 
 #endif
