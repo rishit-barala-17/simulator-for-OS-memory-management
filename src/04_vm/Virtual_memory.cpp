@@ -126,8 +126,22 @@ void VirtualMemory::printStats() const
     cout << "\n=== VM Report ===\n";
     cout << "Memory accesses: " << access_count << endl;
     cout << "Faulted pages: " << fault_count << endl;
+    cout << "Hit pages: " << (access_count - fault_count) << endl;
     cout << "Fault ratio: " ;
     cout << (access_count ? 100.0 * fault_count / access_count : 0.0) ;
     cout << " %\n";
+    cout << "Hit ratio: " ;
+    cout << (access_count ? 100.0 * (access_count - fault_count) / access_count : 0.0) ;
+    cout << " %\n";
+    
+    int frames_used = 0;
+    for (int i = 0; i < total_frames; i++) 
+    {
+        if (frame_status[i]) frames_used++;
+    }
+    cout << "Frames utilized: " << frames_used << " / " << total_frames << endl;
+    cout << "Memory utilization: " ;
+    cout << (total_frames ? 100.0 * frames_used / total_frames : 0.0) ;
+    cout << " %" << endl;
 }
 

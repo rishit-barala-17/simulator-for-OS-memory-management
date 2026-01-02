@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "01_mem/mem_allocator.h"
 #include "02_buddy/buddy_alloc.h"
@@ -18,30 +19,83 @@ int main()
 
     ReplacementPolicy cachePolicy = ReplacementPolicy::FIFO;
 
-    string line;
-
     cout << "Unified Memory Management Simulator CLI\n";
     cout << "Modes: mem | buddy | cache | vm\n";
     cout << "Type: mode <name> to switch, exit to quit\n\n";
 
-    string mode;
+    string mode; // current interactive mode: "mem", "buddy", "cache", "vm"
 
+    string line;
     while (true)
     {
         cout << "> ";
         if (!getline(cin, line)) break;
 
-        stringstream ss(line);
-        string cmd;
-        ss >> cmd;
+        // tokenize input
+        stringstream parser(line);
+        vector<string> tokens;
+        string tok;
+        while (parser >> tok) tokens.push_back(tok);
+        if (tokens.empty()) continue;
 
-        if (cmd == "exit")
-            break;
+        // default: first token is command, rest are args
+        string cmd = tokens[0];
+        // build args stream normally from tokens[1..]
+        auto build_args = [&](size_t start=1) {
+            string s;
+            for (size_t i = start; i < tokens.size(); ++i) {
+                if (i > start) s += " ";
+                s += tokens[i];
+            }
+            return stringstream(s);
+        };
+        stringstream ss = build_args(1);
 
-        if (cmd == "mode")
-        {
-            ss >> mode;
-            cout << "Switched to mode: " << mode << endl;
+        // Global commands
+        if (cmd == "exit") break;
+
+        if (cmd == "mode") {
+            if (tokens.size() < 2) {
+                cout << "Usage: mode <mem|buddy|cache|vm>\n";
+                continue;
+            }
+            string m = tokens[1];
+            if (m == "mem" || m == "memory") { mode = "mem"; cout << "Switched to mode: memory\n"; }
+            else if (m == "buddy") { mode = "buddy"; cout << "Switched to mode: buddy\n"; }
+            else if (m == "cache") { mode = "cache"; cout << "Switched to mode: cache\n"; }
+            else if (m == "vm") { mode = "vm"; cout << "Switched to mode: vm\n"; }
+            else { cout << "Invalid mode\n"; }
+            continue;
+        }
+        // Special command mappings to modes
+        if (cmd == "init" && tokens.size() >= 2) {
+            string sub = tokens[1];
+            if (sub == "memory") { mode = "mem"; cmd = "init"; ss = build_args(2); }
+            else if (sub == "buddy") { mode = "buddy"; cmd = "init"; ss = build_args(2); }
+            else if (sub == "cache") { mode = "cache"; cmd = "init"; ss = build_args(2); }
+            else if (sub == "vm") { mode = "vm"; cmd = "init"; ss = build_args(2); }
+        }
+        else if (cmd == "set" && tokens.size() >= 2 && tokens[1] == "allocator") {
+            // map 'set allocator first_fit' -> memory mode, cmd="set", arg="first_fit"
+            mode = "mem";
+            cmd = "set";
+            ss = build_args(2);
+        }
+        else if (cmd == "dump" && tokens.size() >= 2) {
+            string sub = tokens[1];
+            if (sub == "memory") { mode = "mem"; cmd = "dump"; ss = build_args(2); }
+            else if (sub == "buddy") { mode = "buddy"; cmd = "dump"; ss = build_args(2); }
+        }
+        else if (cmd == "stats" && tokens.size() >= 2) {
+            string sub = tokens[1];
+            if (sub == "memory") { mode = "mem"; cmd = "stats"; ss = build_args(2); }
+            else if (sub == "cache") { mode = "cache"; cmd = "stats"; ss = build_args(2); }
+            else if (sub == "vm") { mode = "vm"; cmd = "stats"; ss = build_args(2); }
+        }
+
+        // Keep backward compatibility: if no mode selected, require mode (unless the command set above selected one)
+        if (mode.empty() && !(cmd == "init" && ss.str().size()>0 && (tokens.size()>=2))) {
+            cout << "Select mode first\n";
             continue;
         }
 
@@ -55,6 +109,10 @@ int main()
             else if (cmd == "init")
             {
                 int size; ss >> size;
+                if (!ss && tokens.size() >= 2 && tokens[1] == "memory") {
+                    // fallback if parsing failed but original tokens present
+                    size = stoi(tokens.back());
+                }
                 delete memAlloc;
                 memAlloc = new MemAllocator(size);
                 cout << "Memory initialized\n";
@@ -63,9 +121,9 @@ int main()
             {
                 string a; ss >> a;
                 if (!memAlloc) { cout << "Not initialized\n"; continue; }
-                if (a == "first") memAlloc->setallocator(FIRST_FIT);
-                else if (a == "best") memAlloc->setallocator(BEST_FIT);
-                else if (a == "worst") memAlloc->setallocator(WORST_FIT);
+                if (a == "first" || a == "first_fit") memAlloc->setallocator(FIRST_FIT);
+                else if (a == "best" || a == "best_fit") memAlloc->setallocator(BEST_FIT);
+                else if (a == "worst" || a == "worst_fit") memAlloc->setallocator(WORST_FIT);
                 else { cout << "Invalid\n"; continue; }
             }
             else if (cmd == "malloc")
