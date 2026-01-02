@@ -1,0 +1,112 @@
+CACHE SIMULATOR – TEST RESULTS
+
+Test Description:
+This test validates multilevel cache behavior by simulating memory accesses under FIFO, LRU, and LFU replacement policies, ensuring correct hit/miss tracking and proper propagation of misses across cache levels.
+
+
+
+==============================
+Testing Policy: FIFO
+==============================
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+L1 hit
+L1 miss
+L2 miss
+L3 hit
+L1 miss
+L2 miss
+L3 hit
+Cache miss at all levels -> data fetched from main memory
+L1 Cache Stats:
+Hits: 1
+Misses: 11
+Hit Ratio: 0.0833
+L2 Cache Stats:
+Hits: 0
+Misses: 11
+Hit Ratio: 0.0000
+L3 Cache Stats:
+Hits: 2
+Misses: 9
+Hit Ratio: 0.1818
+Total Miss Penalty (levels crossed): 31
+
+==============================
+Testing Policy: LRU
+==============================
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+L1 hit
+L1 miss
+L2 miss
+L3 hit
+L1 miss
+L2 miss
+L3 hit
+Cache miss at all levels -> data fetched from main memory
+L1 Cache Stats:
+Hits: 1
+Misses: 11
+Hit Ratio: 0.0833
+L2 Cache Stats:
+Hits: 0
+Misses: 11
+Hit Ratio: 0.0000
+L3 Cache Stats:
+Hits: 2
+Misses: 9
+Hit Ratio: 0.1818
+Total Miss Penalty (levels crossed): 31
+
+==============================
+Testing Policy: LFU
+==============================
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+Cache miss at all levels -> data fetched from main memory
+L1 miss
+L2 miss
+L3 hit
+L1 miss
+L2 miss
+L3 hit
+L1 hit
+Cache miss at all levels -> data fetched from main memory
+L1 Cache Stats:
+Hits: 1
+Misses: 11
+Hit Ratio: 0.0833
+L2 Cache Stats:
+Hits: 0
+Misses: 11
+Hit Ratio: 0.0000
+L3 Cache Stats:
+Hits: 2
+Misses: 9
+Hit Ratio: 0.1818
+Total Miss Penalty (levels crossed): 31
+
+
+
+Conclusion:
+Cache hits and misses are correctly identified at each cache level.
+Replacement policies behave according to their defined algorithms.
+Cache statistics accurately represent access behavior and cache performance.

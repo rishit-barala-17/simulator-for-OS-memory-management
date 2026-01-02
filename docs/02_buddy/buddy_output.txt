@@ -1,0 +1,120 @@
+BUDDY ALLOCATOR – TEST RESULTS
+
+Test Description:
+This test validates the Buddy Memory Allocation algorithm by verifying power-of-two rounding, recursive block splitting, correct free-list management, allocation failure handling, and buddy coalescing during deallocation using fixed memory requests.
+
+
+
+== B U D D Y   F R E E   L I S T S ==
+    Size            Block Addresses
+-------------------------------------
+     64                  0x0
+-------------------------------------
+
+=== ALLOCATION SUCCESS ===
+Start Address   : 0x0
+Requested Size  : 1 bytes
+Allocated Size  : 1 bytes
+
+== B U D D Y   F R E E   L I S T S ==
+    Size            Block Addresses
+-------------------------------------
+     1                   0x1
+     2                   0x2
+     4                   0x4
+     8                   0x8
+     16                  0x10
+     32                  0x20
+-------------------------------------
+
+=== ALLOCATION SUCCESS ===
+Start Address   : 0x8
+Requested Size  : 8 bytes
+Allocated Size  : 8 bytes
+
+== B U D D Y   F R E E   L I S T S ==
+    Size            Block Addresses
+-------------------------------------
+     1                   0x1
+     2                   0x2
+     4                   0x4
+     16                  0x10
+     32                  0x20
+-------------------------------------
+
+=== ALLOCATION SUCCESS ===
+Start Address   : 0x10
+Requested Size  : 9 bytes
+Allocated Size  : 16 bytes
+
+== B U D D Y   F R E E   L I S T S ==
+    Size            Block Addresses
+-------------------------------------
+     1                   0x1
+     2                   0x2
+     4                   0x4
+     32                  0x20
+-------------------------------------
+
+=== FREE SUCCESS ===
+Start Address  : 0x8
+Block Size     : 8 bytes
+
+== B U D D Y   F R E E   L I S T S ==
+    Size            Block Addresses
+-------------------------------------
+     1                   0x1
+     2                   0x2
+     4                   0x4
+     8                   0x8
+     32                  0x20
+-------------------------------------
+
+=== FREE SUCCESS ===
+Start Address  : 0x0
+Block Size     : 16 bytes
+
+== B U D D Y   F R E E   L I S T S ==
+    Size            Block Addresses
+-------------------------------------
+     16                  0x0
+     32                  0x20
+-------------------------------------
+
+=== ALLOCATION SUCCESS ===
+Start Address   : 0x0
+Requested Size  : 16 bytes
+Allocated Size  : 16 bytes
+
+== B U D D Y   F R E E   L I S T S ==
+    Size            Block Addresses
+-------------------------------------
+     32                  0x20
+-------------------------------------
+
+=== ALLOCATION FAILED ===
+Requested Size : 128 bytes
+Reason         : No suitable free block
+
+=== FREE SUCCESS ===
+Start Address  : 0x10
+Block Size     : 16 bytes
+
+=== FREE SUCCESS ===
+Start Address  : 0x0
+Block Size     : 64 bytes
+
+== B U D D Y   F R E E   L I S T S ==
+    Size            Block Addresses
+-------------------------------------
+     64                  0x0
+-------------------------------------
+
+
+
+
+Conclusion:
+Requested sizes are correctly rounded up to the nearest power of two.
+Recursive splitting and free-list updates operate correctly.
+Buddy coalescing successfully merges adjacent free blocks.
+Allocation failures are correctly reported when no suitable block is available

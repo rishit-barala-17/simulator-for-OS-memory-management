@@ -1,0 +1,52 @@
+VIRTUAL MEMORY SIMULATOR – TEST RESULTS
+
+Test Description:
+This test validates virtual-to-physical address translation using paging by verifying page table lookups, page fault handling, frame allocation, and correct tracking of page hits and page faults using fixed virtual address accesses.
+
+
+
+--- Sequential accesses (hits + faults) ---
+Page fault occurred | Page 0 mapped to physical address 10
+Page fault occurred | Page 1 mapped to physical address 120
+Page fault occurred | Page 2 mapped to physical address 250
+Access successful | Physical address = 30
+Access successful | Physical address = 180
+
+--- FIFO eviction check ---
+Page fault occurred | Evicting page 0 | Page 3 mapped to physical address 50
+Access successful | Physical address = 120
+Page fault occurred | Evicting page 1 | Page 0 mapped to physical address 110
+
+--- Invalid address test ---
+Virtual address error: page index invalid
+Access successful | Physical address = 95
+
+--- Edge case validation ---
+Page fault occurred | Evicting page 2 | Page 1 mapped to physical address 200
+Page fault occurred | Evicting page 3 | Page 7 mapped to physical address 99
+Access successful | Physical address = 201
+Access successful | Physical address = 202
+
+--- Eviction stress test ---
+Page fault occurred | Evicting page 0 | Page 4 mapped to physical address 100
+Page fault occurred | Evicting page 1 | Page 5 mapped to physical address 200
+Page fault occurred | Evicting page 7 | Page 6 mapped to physical address 0
+
+--- translate() API test ---
+translate(250) -> 150 | fault=1
+translate(450) -> 250 | fault=1
+translate(120) -> 20 | fault=1
+
+--- Final statistics ---
+
+=== VM Report ===
+Memory accesses: 20
+Faulted pages: 13
+Fault ratio: 65 %
+
+
+
+Conclusion:
+Virtual addresses are correctly translated into physical addresses.
+Page faults are accurately detected and handled.
+Page hit and fault statistics correctly reflect memory access behavior.

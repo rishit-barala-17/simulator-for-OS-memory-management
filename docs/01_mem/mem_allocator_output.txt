@@ -1,0 +1,130 @@
+MEMORY ALLOCATOR – TEST RESULTS
+
+Test Description:
+This test validates First/Best/Worst Fit allocation, block splitting, freeing, coalescing, and fragmentation statistics using fixed requests.
+
+
+
+=== ALLOCATION SUCCESS ===
+Algorithm      : WORST_FIT
+Block ID       : 1
+Start Address  : 0x0
+Block Size     : 120 bytes
+
+============ M E M O R Y   M A P ============
+Address Range   Status   Block ID   Size
+---------------------------------------------
+0x0   - 0x77     USED       1       120 bytes
+0x78  - 0x3ff    FREE       -       904 bytes
+---------------------------------------------
+
+=== ALLOCATION SUCCESS ===
+Algorithm      : WORST_FIT
+Block ID       : 2
+Start Address  : 0x78
+Block Size     : 180 bytes
+
+============ M E M O R Y   M A P ============
+Address Range   Status   Block ID   Size
+---------------------------------------------
+0x0   - 0x77     USED       1       120 bytes
+0x78  - 0x12b    USED       2       180 bytes
+0x12c - 0x3ff    FREE       -       724 bytes
+---------------------------------------------
+
+=== ALLOCATION SUCCESS ===
+Algorithm      : WORST_FIT
+Block ID       : 3
+Start Address  : 0x12c
+Block Size     : 200 bytes
+
+============ M E M O R Y   M A P ============
+Address Range   Status   Block ID   Size
+---------------------------------------------
+0x0   - 0x77     USED       1       120 bytes
+0x78  - 0x12b    USED       2       180 bytes
+0x12c - 0x1f3    USED       3       200 bytes
+0x1f4 - 0x3ff    FREE       -       524 bytes
+---------------------------------------------
+
+=== FREE SUCCESS ===
+Block ID   : 2
+Status     : OK
+
+============ M E M O R Y   M A P ============
+Address Range   Status   Block ID   Size
+---------------------------------------------
+0x0   - 0x77     USED       1       120 bytes
+0x78  - 0x12b    FREE       -       180 bytes
+0x12c - 0x1f3    USED       3       200 bytes
+0x1f4 - 0x3ff    FREE       -       524 bytes
+---------------------------------------------
+
+=== ALLOCATION SUCCESS ===
+Algorithm      : WORST_FIT
+Block ID       : 4
+Start Address  : 0x1f4
+Block Size     : 150 bytes
+
+============ M E M O R Y   M A P ============
+Address Range   Status   Block ID   Size
+---------------------------------------------
+0x0   - 0x77     USED       1       120 bytes
+0x78  - 0x12b    FREE       -       180 bytes
+0x12c - 0x1f3    USED       3       200 bytes
+0x1f4 - 0x289    USED       4       150 bytes
+0x28a - 0x3ff    FREE       -       374 bytes
+---------------------------------------------
+
+=== FREE SUCCESS ===
+Block ID   : 4
+Status     : OK
+
+============ M E M O R Y   M A P ============
+Address Range   Status   Block ID   Size
+---------------------------------------------
+0x0   - 0x77     USED       1       120 bytes
+0x78  - 0x12b    FREE       -       180 bytes
+0x12c - 0x1f3    USED       3       200 bytes
+0x1f4 - 0x3ff    FREE       -       524 bytes
+---------------------------------------------
+
+=== ALLOCATION SUCCESS ===
+Algorithm      : BEST_FIT
+Block ID       : 5
+Start Address  : 0x78
+Block Size     : 140 bytes
+
+============ M E M O R Y   M A P ============
+Address Range   Status   Block ID   Size
+---------------------------------------------
+0x0   - 0x77     USED       1       120 bytes
+0x78  - 0x103    USED       5       140 bytes
+0x104 - 0x12b    FREE       -       40 bytes
+0x12c - 0x1f3    USED       3       200 bytes
+0x1f4 - 0x3ff    FREE       -       524 bytes
+---------------------------------------------
+
+===============================================
+M E M O R Y   S T A T I S T I C S   R E P O R T
+===============================================
+Total Memory                       : 1024 bytes
+Used Memory                        : 460 bytes
+Free Memory                        : 564 bytes
+Total Requests                     : 5
+Successful Allocations             : 5
+Failed Allocations                 : 0
+Internal Fragmentation             : 0 bytes
+External Fragmentation             : 7.09 %
+Memory Utilization                 : 44.92 %
+Allocation Success Rate            : 100.00 %
+===============================================
+
+
+
+Conclusion:
+The memory allocation strategies (First Fit, Best Fit, Worst Fit) operate as intended and select appropriate free blocks based on the chosen policy.
+Memory blocks are correctly split during allocation to minimize wasted space.
+Deallocation correctly triggers coalescing of adjacent free blocks, reducing external fragmentation.
+Fragmentation statistics and memory utilization metrics accurately reflect the internal state of the simulated memory.
+
