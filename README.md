@@ -1,3 +1,12 @@
+# Demo Video
+
+Watch a short demo of the simulator :
+
+<video controls width="720" preload="metadata">
+  <source src="docs/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag. Download the video: [Demo video](docs/demo.mp4)
+</video>
+
 # OS Memory Management Simulator
 
 ## 1. Project Title
@@ -22,8 +31,18 @@ User‑space C++ simulator for core memory management concepts used in an operat
   - 04_vm/ (virtual memory)  
 - tests/ (non‑interactive test programs)  
 - docs/  
-  - design.md  
-  - *_output.txt (captured test outputs and logs)
+  - 01_mem/mem_allocator_output.txt
+  - 02_buddy/buddy_output.txt
+  - 03_cache/cache_output.txt
+  - 04_vm/vm_output.txt
+  - cli/
+    - 01_mode_mem/
+    - 02_mode_buddy/
+    - 03_mode_cache/
+    - 04_mode_vm/
+  - cli_cmd_reference.md 
+  - demo.mp4 (demo video)
+  - design.md 
 
 ## 5. Build Instructions
 
@@ -45,13 +64,45 @@ g++ -std=c++17 -O2 src/main.cpp src/01_mem/mem_Allocator.cpp src/02_buddy/Buddy_
 - Run the compiled executable (memsim or memsim.exe).  
 - Use the CLI to initialize modules, run allocations, exercise cache/VM behavior, or invoke test programs.
 
-## 7. Example CLI Usage
+## 7. Quick CLI Example
+
+**Memory Allocator:**
 ```
 > init memory 1024
 > set allocator first_fit
+> malloc 256
+> malloc 512
 > malloc 100
 > free 1
-> dump memory
+> dump
+> stats
+```
+
+**Buddy Allocator:**
+```
+> init buddy 2048
+> alloc 256
+> alloc 512
+> free 0x0 256
+> dump
+```
+
+**Cache Simulator:**
+```
+> policy lru
+> init 64 256 1024
+> access 0x100
+> access 0x200
+> access 0x100
+> stats
+```
+
+**Virtual Memory:**
+```
+> init vm 64 16 4096
+> access 1000
+> access 2000
+> translate 1000
 > stats
 ```
 
@@ -65,6 +116,7 @@ g++ -std=c++17 -O2 tests/mem_tests.cpp src/01_mem/mem_Allocator.cpp -o mem_tests
 - Captured, deterministic outputs are stored in docs/*_output.txt for verification.
 
 ## 9. Documentation Reference
+- **CLI Command Reference**: See [docs/cli_cmd_reference.md](docs/cli_cmd_reference.md) for complete command documentation.  
 - Detailed design and module descriptions: docs/design.md  
 - Test traces and logs: docs/*_output.txt
 

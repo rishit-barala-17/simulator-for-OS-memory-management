@@ -16,7 +16,7 @@ This repository provides a user‑space C++ simulator that models core operating
 
 ## 2. Project Structure
 
-Repository layout (concise, indented view)
+Repository layout
 
 ```
 src/
@@ -34,11 +34,27 @@ src/
    ├─ Virtual_memory.cpp
    └─ virtual_memory.h
 
+
 docs/
-├─ 01_mem/mem_allocator_output.txt
-├─ 02_buddy/buddy_output.txt
-├─ 03_cache/cache_output.txt
-├─ 04_vm/vm_output.txt
+├─ 01_mem/
+   ├─mem_allocator_output.png
+   └─mem_allocator_output.txt
+├─ 02_buddy/
+   ├─buddy_output.png
+   └─buddy_output.txt
+├─ 03_cache/
+   ├─cache_output.png
+   └─cache_output.txt
+├─ 04_vm/
+   ├─vm_output.png
+   └─vm_output.txt
+├─ cli/
+│  ├─ 01_mode_mem/
+│  ├─ 02_mode_buddy/
+│  ├─ 03_mode_cache/
+│  └─ 04_mode_vm/
+├─ cli_cmd_reference.md
+├─ demo.mp4 (demo video)
 └─ design.md
 
 tests/
