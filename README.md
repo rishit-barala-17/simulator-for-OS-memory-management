@@ -2,10 +2,11 @@
 
 Watch a short demo of the simulator :
 
-<video controls width="720" preload="metadata">
-  <source src="docs/demo.mp4" type="video/mp4">
-  Your browser does not support the video tag. Download the video: [Demo video](docs/demo.mp4)
-</video>
+
+https://github.com/user-attachments/assets/bb2c7443-03fc-471a-bafc-4c0091fe6194
+
+
+
 
 # OS Memory Management Simulator
 
